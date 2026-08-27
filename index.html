@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kula Revise | Extended Writing</title>
+<style>
+:root{
+  --paper:#FFFDF5; --sheet:#FFFFFF; --ink:#14130F; --ink-soft:#56534A;
+  --accent:#FFD400; --accent-ink:#14130F; --rule:#E3DFCF;
+  --good:#0F6B3F; --good-bg:#E6F3EA; --miss:#C1121F; --miss-bg:#FBE3E4;
+  --shadow:0 1px 0 rgba(20,19,15,.06);
+  --sans:"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+body.dark{
+  --paper:#14130F; --sheet:#1C1A15; --ink:#F5F2E8; --ink-soft:#A9A497;
+  --accent:#FFE24A; --accent-ink:#14130F; --rule:#33302A;
+  --good:#6EDA9B; --good-bg:#12301F; --miss:#FF6B5E; --miss-bg:#3A1512;
+  --shadow:0 1px 0 rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:17px;line-height:1.6;padding-bottom:6rem;
+}
+.wrap{max-width:44rem;margin:0 auto;padding:1.1rem 1.15rem 0}
+
+/* ---- top bar ---- */
+.bar{position:sticky;top:0;z-index:30;background:var(--paper);
+  padding:.7rem 0 .55rem;border-bottom:1px solid var(--rule)}
+.bar-row{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.track{height:3px;background:var(--rule);margin-top:.5rem}
+.fill{height:100%;background:var(--accent);width:0;transition:width .3s ease}
+
+/* ---- type ---- */
+h1{font-size:clamp(2rem,7vw,3.1rem);line-height:1.03;letter-spacing:-.03em;
+  font-weight:800;margin:.2rem 0 .6rem}
+h2{font-size:clamp(1.35rem,4.4vw,1.75rem);line-height:1.15;letter-spacing:-.02em;
+  font-weight:800;margin:0 0 .7rem}
+h3{font-size:1.02rem;font-weight:700;margin:1.3rem 0 .45rem;letter-spacing:-.01em}
+p{margin:0 0 .85rem}
+.eyebrow{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:.7rem}
+
+/* ---- the signature: the examiner's margin ---- */
+.margin-strip{border-left:6px solid var(--accent);padding-left:1rem}
+
+.card{background:var(--sheet);border:1px solid var(--rule);
+  padding:1.25rem 1.15rem;margin-bottom:1.1rem;box-shadow:var(--shadow)}
+
+.hl{background:var(--accent);color:var(--accent-ink);
+  padding:.1em .32em;font-weight:800;box-decoration-break:clone;
+  -webkit-box-decoration-break:clone}
+body.dark .hl{font-weight:700}
+
+/* ---- cover ---- */
+.cover{padding:2.2rem 0 1rem}
+.cover-lines{font-size:1.06rem;color:var(--ink-soft);margin-bottom:1.6rem}
+.cover-lines b{color:var(--ink);font-weight:700}
+
+/* ---- story ---- */
+.stamp{display:inline-block;background:var(--accent);color:var(--accent-ink);
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;font-weight:700;
+  text-transform:uppercase;padding:.3rem .55rem;margin-bottom:.9rem}
+.story p{font-size:1.1rem;line-height:1.55;margin-bottom:.75rem}
+.story > p:last-child{color:var(--ink);font-weight:700}
+
+/* ---- stimulus ---- */
+.stimulus{background:var(--sheet);border:1px solid var(--rule);padding:1rem}
+.stimulus svg{width:100%;height:auto;display:block}
+.cap{font-family:var(--mono);font-size:.68rem;line-height:1.5;
+  color:var(--ink-soft);margin-top:.7rem}
+.stem{border-top:2px solid var(--ink);margin-top:1rem;padding-top:.9rem}
+.stem ol{margin:.6rem 0 0;padding-left:1.3rem}
+.stem li{margin-bottom:.35rem}
+
+/* ---- questions ---- */
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:.8rem;
+  margin-bottom:.7rem;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:.64rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-soft);border:1px solid var(--rule);
+  padding:.24rem .5rem}
+.marks{font-family:var(--mono);font-size:.64rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.q{font-size:1.08rem;font-weight:700;line-height:1.4;margin-bottom:.95rem}
+.opts{display:flex;flex-direction:column;gap:.5rem}
+.opt{display:flex;gap:.7rem;align-items:flex-start;text-align:left;width:100%;
+  min-height:44px;padding:.75rem .85rem;background:var(--paper);
+  border:1px solid var(--rule);color:var(--ink);font:inherit;line-height:1.45;
+  cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.opt:disabled{cursor:default}
+.opt .key{font-family:var(--mono);font-size:.8rem;font-weight:700;
+  color:var(--ink-soft);flex:0 0 auto;padding-top:.05rem}
+.opt.right{background:var(--good-bg);border-color:var(--good);border-width:2px}
+.opt.right .key{color:var(--good);font-weight:800}
+.opt.right .key::after{content:' \2713'}
+.opt.wrong{background:var(--miss-bg);border-color:var(--miss);border-width:2px}
+.opt.wrong .key{color:var(--miss);font-weight:800}
+.opt.wrong .key::after{content:' \2717'}
+.fb{margin-top:1rem;border:1px solid var(--rule);border-left-width:6px;
+  padding:.85rem .95rem;font-size:.98rem}
+.fb.y{border-color:var(--good);background:var(--good-bg)}
+.fb.n{border-color:var(--miss);background:var(--miss-bg)}
+.fb p{margin:0 0 .6rem}
+.fb p:last-child{margin:0}
+.fb .pick{font-weight:700}
+.expl b{font-weight:700}
+.verdict{font-family:var(--mono);font-size:.72rem;letter-spacing:.11em;
+  text-transform:uppercase;font-weight:700;display:flex;align-items:center;
+  gap:.4em;margin-bottom:.4rem}
+.verdict .mk{font-family:var(--sans);font-size:1.2em;line-height:1;font-weight:800}
+.verdict.y{color:var(--good)}
+.verdict.n{color:var(--miss)}
+
+/* ---- candidate script ---- */
+.script{font-family:var(--serif);font-size:1.02rem;line-height:1.75;
+  background:var(--sheet);border:1px solid var(--rule);
+  border-left:6px solid var(--accent);padding:1rem 1.05rem}
+.script p{margin:0 0 .7rem} .script p:last-child{margin:0}
+.dims{display:flex;flex-wrap:wrap;gap:.4rem;margin:.9rem 0 0}
+.dim{font-family:var(--mono);font-size:.62rem;letter-spacing:.09em;
+  text-transform:uppercase;border:1px solid var(--rule);padding:.24rem .45rem;
+  color:var(--ink-soft)}
+
+/* ---- nav ---- */
+.nav{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.4rem 0 2rem}
+button.go{min-height:44px;padding:.8rem 1.5rem;font:inherit;font-weight:700;
+  background:var(--ink);color:var(--paper);border:2px solid var(--ink);
+  cursor:pointer;letter-spacing:-.01em}
+button.go:hover{background:var(--accent);color:var(--accent-ink);
+  border-color:var(--accent)}
+button.go:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+button.ghost{background:transparent;color:var(--ink);border:2px solid var(--rule)}
+button.ghost:hover{background:transparent;border-color:var(--ink);color:var(--ink)}
+button.go:disabled{opacity:.4;cursor:default}
+
+/* ---- results ---- */
+.score{font-size:clamp(3rem,15vw,5rem);font-weight:800;letter-spacing:-.04em;
+  line-height:1}
+.score small{font-size:.3em;color:var(--ink-soft);font-weight:700;letter-spacing:0}
+.band{display:inline-block;background:var(--accent);color:var(--accent-ink);
+  font-weight:800;padding:.35rem .7rem;margin:.7rem 0 1rem;
+  font-size:1.05rem;letter-spacing:-.01em}
+.recap{border-top:1px solid var(--rule);padding-top:.8rem;margin-top:.4rem}
+.recap div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.35rem 1rem;
+  padding:.45rem 0;border-bottom:1px solid var(--rule);font-size:.94rem}
+.recap span:last-child{font-family:var(--mono);font-size:.7rem;
+  letter-spacing:.08em;text-transform:uppercase;flex:0 0 auto;padding-top:.2rem}
+
+/* ---- mode toggle ---- */
+#mode{position:fixed;right:.9rem;bottom:.9rem;z-index:60;min-height:44px;
+  display:inline-flex;align-items:center;gap:.45em;padding:.55rem .8rem;
+  background:var(--sheet);color:var(--ink);border:1px solid var(--rule);
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;font-weight:700;
+  text-transform:uppercase;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.16)}
+#mode:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+#mode svg{width:14px;height:14px;display:block}
+@media print{#mode{display:none}}
+
+/* ---- tappable reveal panels ---- */
+.reveal{display:flex;flex-direction:column;gap:.5rem;margin-top:.9rem}
+.rv{border:1px solid var(--rule);background:var(--paper)}
+.rv-top{display:flex;gap:.7rem;align-items:center;width:100%;min-height:44px;
+  padding:.75rem .85rem;background:none;border:0;color:var(--ink);font:inherit;
+  font-weight:700;text-align:left;cursor:pointer;line-height:1.35}
+.rv-top:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.rv-num{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--ink-soft);
+  border:1px solid var(--rule);padding:.18rem .4rem;flex:0 0 auto}
+.rv-sign{margin-left:auto;font-family:var(--mono);font-size:1rem;color:var(--ink-soft);flex:0 0 auto}
+.rv.open{border-color:var(--ink)}
+.rv.open .rv-num{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.rv-body{padding:0 .85rem .85rem;font-size:.97rem}
+.rv-body p{margin:.2rem 0 .55rem}
+.rv-body p:last-child{margin-bottom:0}
+.done-note{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);margin-top:.9rem}
+
+/* ---- the rubric ladder ---- */
+.lad{display:flex;flex-direction:column;gap:.35rem;margin-top:.9rem}
+.lv-top{display:flex;flex-wrap:wrap;gap:.6rem;align-items:baseline;width:100%;min-height:44px;
+  padding:.6rem .75rem;background:var(--paper);border:1px solid var(--rule);
+  color:var(--ink);font:inherit;text-align:left;cursor:pointer;line-height:1.35}
+.lv-top:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.lv-name{font-weight:800;flex:0 0 4.6rem}
+.lv-mark{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);flex:0 0 auto}
+.lv-gist{font-size:.9rem;color:var(--ink-soft);flex:1 1 100%}
+.lv.open .lv-top{border-color:var(--ink);background:var(--sheet)}
+.lv-body{border:1px solid var(--ink);border-top:0;padding:.7rem .75rem;font-size:.93rem}
+.lv-body dl{margin:0}
+.lv-body dt{font-family:var(--mono);font-size:.63rem;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--ink-soft);margin-top:.5rem}
+.lv-body dt:first-child{margin-top:0}
+.lv-body dd{margin:.1rem 0 0}
+.step-note{border-left:6px solid var(--accent);padding:.6rem 0 .6rem .9rem;
+  margin-top:1rem;font-size:.95rem}
+
+@media (max-width:400px){ .lv-name{flex:0 0 4rem} }
+
+/* ---- pop-up ---- */
+.modal-back{position:fixed;inset:0;background:rgba(10,9,7,.72);z-index:80;
+  display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:var(--sheet);border:1px solid var(--rule);border-left:6px solid var(--accent);
+  max-width:33rem;width:100%;max-height:86vh;overflow:auto;padding:1.35rem 1.2rem;
+  box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.modal h3{margin:0 0 .3rem;font-size:1.25rem;letter-spacing:-.02em}
+.modal .eyebrow{margin-bottom:.55rem}
+.modal .pt{margin:0 0 .9rem;padding-left:1rem;border-left:2px solid var(--rule)}
+.modal .pt b{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:.18rem}
+.modal-close{min-height:44px;width:100%;margin-top:.4rem;padding:.8rem 1.2rem;font:inherit;
+  font-weight:700;background:var(--ink);color:var(--paper);border:2px solid var(--ink);cursor:pointer}
+.modal-close:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+
+.hidden{display:none !important}
+
+@media (max-width:560px){
+  body{font-size:16px}
+  .wrap{padding:.9rem .8rem 0}
+  .card{padding:1rem .85rem}
+  .story p{font-size:1.04rem}
+  .nav{flex-direction:column}
+  .nav button{flex:1 1 100%;width:100%}
+  .nav button.ghost{order:2}
+  .nav button:not(.ghost){order:1}
+}
+@media (max-width:400px){
+  body{font-size:15.5px}
+  .q{font-size:1.02rem}
+  .opt{padding:.7rem .7rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<button id="mode" type="button" aria-label="Switch colour mode">
+  <span id="mode-icon"></span><span id="mode-label"></span>
+</button>
+
+<div class="bar hidden" id="bar"><div class="wrap" style="padding-top:0">
+  <div class="bar-row"><span>Extended writing</span><span id="step">Step 1</span></div>
+  <div class="track"><div class="fill" id="fill"></div></div>
+</div></div>
+
+<div class="wrap"><div id="stage"></div></div>
+
+<script>
+/* ============================================================
+   Kula Revise. Skill Lab: extended writing, IEB Paper 1 Section B.
+   Standalone. No LMS embed helper, because this file is not
+   sequenced inside a unit.
+   ============================================================ */
+(function(){
+"use strict";
+
+/* ---------- theme. stored choice wins, then the device, then light ---------- */
+var K="kula-mode";
+var SUN="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round'><circle cx='12' cy='12' r='4.2'/><path d='M12 1.8v2M12 20.2v2M3.8 12h-2M22.2 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M18.4 5.6l1.4-1.4M4.2 19.8l1.4-1.4'/></svg>";
+var MOON="<svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z'/></svg>";
+function paintMode(){
+  var dark=document.body.classList.contains("dark");
+  var i=document.getElementById("mode-icon"),l=document.getElementById("mode-label");
+  if(i) i.innerHTML=dark?SUN:MOON;
+  if(l) l.textContent=dark?"Light":"Dark";
+  var b=document.getElementById("mode");
+  if(b) b.setAttribute("aria-label", dark?"Switch to light mode":"Switch to dark mode");
+}
+(function bootMode(){
+  var stored=null;
+  try{ stored=localStorage.getItem(K); }catch(e){}
+  if(stored==="dark"){ document.body.classList.add("dark"); }
+  else if(stored==="light"){ /* the learner chose light. the device does not override it. */ }
+  else if(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches){
+    document.body.classList.add("dark");
+  }
+})();
+document.getElementById("mode").addEventListener("click",function(){
+  var dark=document.body.classList.toggle("dark");
+  try{ localStorage.setItem(K, dark?"dark":"light"); }catch(e){}
+  paintMode();
+});
+paintMode();
+
+/* ---------- the stimulus, drawn for Kula Revise ---------- */
+var BERLIN='<svg viewBox="0 0 400 305" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schematic map of Berlin. The city is divided into four occupation sectors. The French, British and American sectors lie in the west. The Soviet sector lies in the east. A thick line marks the border closed on 13 August 1961.">'+
+'<rect x="0" y="0" width="400" height="305" fill="var(--paper)"/>'+
+/* the whole city */
+'<path d="M60 58 L152 24 L262 19 L350 54 L376 140 L340 226 L232 252 L118 236 L34 176 L30 100 Z" fill="var(--sheet)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>'+
+/* the Soviet sector, tinted */
+'<path d="M243 20 C233 72 252 112 234 152 C222 190 236 222 226 250 L232 252 L340 226 L376 140 L350 54 L262 19 Z" fill="var(--rule)"/>'+
+/* sector boundaries inside the west, dashed, meeting the border at separate points */
+'<g stroke="var(--ink)" stroke-width="1.6" stroke-dasharray="6 5" opacity="0.55" fill="none">'+
+'<path d="M31 101 L238 90"/><path d="M62 196 L230 176"/></g>'+
+/* the border closed in August 1961: dark casing so it reads on light ground too */
+'<path d="M243 20 C233 72 252 112 234 152 C222 190 236 222 226 250" fill="none" stroke="var(--ink)" stroke-width="9.5" stroke-linecap="round"/>'+
+'<path d="M243 20 C233 72 252 112 234 152 C222 190 236 222 226 250" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>'+
+/* labels */
+'<g font-family="ui-monospace,Menlo,monospace" font-size="17" font-weight="700" letter-spacing="0.8" fill="var(--ink)">'+
+'<text x="98" y="62">FRENCH</text>'+
+'<text x="66" y="142">BRITISH</text>'+
+'<text x="108" y="210">AMERICAN</text>'+
+'<text x="286" y="136">SOVIET</text></g>'+
+/* key */
+'<path d="M22 288 L54 288" stroke="var(--ink)" stroke-width="9.5" stroke-linecap="round"/>'+
+'<path d="M22 288 L54 288" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>'+
+'<text x="64" y="294" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="var(--ink)">Border closed on 13 August 1961</text>'+
+'</svg>';
+
+/* ---------- content ---------- */
+var FLOW=[
+
+{type:"cover"},
+
+{type:"story", stamp:"Washington &middot; 15 October 1962", lines:[
+ "In 1962 the United States and the Soviet Union were the two strongest countries in the world, and each feared the other.",
+ "That year the Soviet Union began building secret nuclear missile sites in Cuba, about 150 km from Florida.",
+ "On 14 October an American spy plane flew high over the island and photographed the ground.",
+ "The next day, analysts in Washington laid the photographs out on a table.",
+ "They did not argue about whether Khrushchev was allowed to put missiles there.",
+ "They said what was in the pictures, and then what it meant.",
+ "Section B asks you for <span class='hl'>those same two things</span>."
+]},
+
+{type:"question", tag:"Comprehend", marks:"Practice", scored:true,
+ q:"Here are two jobs: say what is there, then say what it means. Which sentence does both?",
+ opts:[
+  "The barrier closed on 13 August 1961, and it stopped the flow of workers leaving for the West",
+  "The barrier closed on 13 August 1961, and it was built of wire, heavy concrete blocks and watchtowers",
+  "Closing the barrier was cruel, and the East German government should be judged harshly for it",
+  "The barrier tells us a great deal about the nature of the Cold War in Europe"
+ ], correct:0,
+ why:[
+  "Yes. You said what happened, then what it did. Both halves earn.",
+  "You said what it was built from. That is true, and you never said what it did.",
+  "That judges the government. Section B does not ask you to judge anyone, so this earns nothing.",
+  "No date, no place, no fact. You have given the marker nothing to reward."
+ ],
+ expl:"A good answer says what is there, then says what it means. Say only what is there and you have written a label. Say only what it means and you have written an opinion."},
+
+{type:"note", eyebrow:"What Section B asks for", h2:"Paper 1, Section B",
+ html:"<p>You get one picture and one question split into sub-questions, usually three. About thirty minutes.</p>"+
+ "<p>You answer each sub-question on its own, in the order printed. No introduction. No conclusion. <span class='hl'>No argument.</span></p>"+
+ "<p>That last one catches good candidates. You have spent the year learning to take a stand. Take one here and you <span class='hl'>answer a question nobody set</span>.</p>"},
+
+{type:"stimulus"},
+
+{type:"question", tag:"Comprehend", marks:"Practice", scored:true,
+ q:"What does the marker want you to do with the map?", short:"What the picture is for",
+ opts:[
+  "Treat what it shows as fact, and write the history around it",
+  "Judge how reliable it is and say who drew it and why",
+  "Quote from it, then explain what it leaves out and cannot show",
+  "Compare it against the other sources printed with the question"
+ ], correct:0,
+ why:[
+  "Yes. Everything you can see in it is yours to use as a fact.",
+  "That is a Paper 2 job. Nobody asked who drew this, so you earn nothing for saying.",
+  "Also Paper 2. What the picture leaves out is not what you are marked on here.",
+  "There are no other sources. You would be answering a question that was not set."
+ ],
+ expl:"The picture is a stimulus, not a source. You are not asked to test it. Use what you can see and spend your time on the history."},
+
+{type:"question", tag:"Comprehend", marks:"Practice", scored:true,
+ q:"What shape should your answer take?", short:"Shape of the answer",
+ opts:[
+  "A separate answer to each sub-question, in the order they are printed",
+  "A short introduction, and then each of the sub-questions answered in turn",
+  "An introduction, then three body paragraphs, and then a conclusion at the end",
+  "One continuous piece of writing that weaves all three sub-questions together"
+ ], correct:0,
+ why:[
+  "Yes. You take them one at a time, in order, then stop.",
+  "The near miss. An introduction looks careful, earns nothing, and eats minutes you needed for facts.",
+  "That is the Section A essay. Write it here and most of what you wrote is not marked.",
+  "Weave them together and the marker cannot see which sub-question you answered."
+ ],
+ expl:"Answer them one at a time and stop. Anything you add for the sake of form costs you time you needed for facts."},
+
+{type:"reveal", eyebrow:"How to build the answer", h2:"Three moves, in this order",
+ lead:"Tap each one.",
+ items:[
+  {t:"Put the stimulus in time",
+   b:"<p>Give the date or the period. Say briefly <span class='hl'>what led up to it</span>.</p>"+
+     "<p>If the question uses a term, explain what that term meant then.</p>"},
+  {t:"Give the facts, and make them the bulk",
+   b:"<p>Name people, places and dates. <span class='hl'>Tie each one to what the picture shows.</span></p>"+
+     "<p>Say what you can see in the picture, and say it more than once.</p>"},
+  {t:"Say what changed, where you are asked",
+   b:"<p><span class='hl'>Only some sub-questions ask this.</span> Look for the word that signals it.</p>"+
+     "<p>Three kinds count: what changed and what stayed, what caused what, and what succeeded or failed.</p>"}
+ ],
+ close:"Roughly <span class='hl'>a page and a half to two pages</span>. Write far less and there is not enough on the page to reward."},
+
+{type:"question", tag:"Comprehend", marks:"Practice", scored:true,
+ q:"Sub-question (a) asks what led the East German government to close the border. Where do you start?", short:"Where to start on (a)",
+ opts:[
+  "With events before August 1961 that pressed on the East German government",
+  "With what the map shows about the sectors on the day it closed",
+  "With your view on whether closing the border was a fair thing to do",
+  "With the opening of the Wall in 1989, then working backwards from there"
+ ], correct:0,
+ why:[
+  "Yes. When a question asks what led to something, you start before it happened.",
+  "That describes the day itself. You never reach the causes, so the sub-question stays unanswered.",
+  "That is a judgement. You were asked what caused it, not whether it was fair.",
+  "Wrong end and wrong decade. You would be writing about 1989 for a question about 1961."
+ ],
+ expl:"What led to it means what came first. Start before the date on the picture and work forward."},
+
+{type:"question", tag:"Apply", marks:"Practice", scored:true,
+ q:"Which sentence uses the map the way this question wants?", short:"Using the map",
+ opts:[
+  "The map shows four sectors, and the 1961 barrier ran between the Soviet sector and the rest",
+  "The map is useful for the layout, but limited because it cannot show what residents felt",
+  "The map was drawn to make the Soviet sector look larger and more threatening than it was",
+  "The map proves the Western powers had already decided to abandon their sectors of the city"
+ ], correct:0,
+ why:[
+  "Yes. You said what is on the page, and that is a fact you may build on.",
+  "That asks how useful the map is. It is a Paper 2 question and it earns you nothing here.",
+  "That asks whether the map is biased. Also Paper 2, so it earns you nothing here.",
+  "A map cannot prove that. Claim more than you can support and the marker counts it against you."
+ ],
+ expl:"Read what is in front of you and state it. The moment you start testing the picture, you have left Section B."},
+
+{type:"question", tag:"Apply", marks:"Practice", scored:true,
+ q:"Sub-question (b) asks how the Western powers responded. Which fact belongs there?", short:"Choosing a fact for (b)",
+ opts:[
+  "Kennedy sent troops by road into West Berlin and sent Johnson to visit the city",
+  "About 2.7 million people left East Germany between 1949 and 1961",
+  "Khrushchev demanded in 1958 that the Western powers leave Berlin within six months",
+  "Ulbricht told a press conference in June 1961 that nobody intended to build a wall"
+ ], correct:0,
+ why:[
+  "Yes. You picked the only one that says what the West actually did.",
+  "True, and it belongs in sub-question (a). Put it here and it earns you nothing.",
+  "True, and it is also a cause. You have the right fact under the wrong sub-question.",
+  "True, and again a cause. The wrong answers that catch you are the true ones."
+ ],
+ expl:"Three of these are accurate and all three belong under (a). A true fact under the wrong sub-question earns nothing."},
+
+{type:"ladder"},
+
+{type:"question", tag:"Comprehend", marks:"Practice", scored:true,
+ q:"You write two pages on sub-question (a) and two lines each on (b) and (c). What happens?", short:"Covering every sub-question",
+ opts:[
+  "The whole answer drops, because the marker sees sub-questions barely answered",
+  "Only (b) and (c) lose out, and (a) is still marked on its own strength",
+  "Nothing much, because the total amount of correct history is what counts",
+  "The answer is marked down for its length rather than for what it covers"
+ ], correct:0,
+ why:[
+  "Yes. Coverage is checked first, so your two thin sub-questions pull the whole thing down.",
+  "The parts are not marked separately. One mark covers everything you wrote.",
+  "Amount is not what is checked. Whether you answered each sub-question is.",
+  "Length is not the problem. You could write four pages and still fall here."
+ ],
+ expl:"You saw this in the ladder. Between level six and level five, the only thing that really moves is whether you answered the sub-questions."},
+
+{type:"question", tag:"Analyse", marks:"Practice", scored:true,
+ q:"One of these sentences would cost the candidate marks. Which one?", short:"Spotting the argument",
+ opts:[
+  "Closing the border was the only sensible choice, and the West was wrong to protest",
+  "By 1961 the loss of skilled workers was doing real damage to the East German economy",
+  "The barrier went up across the city during the night of 12 to 13 August 1961",
+  "West Berliners could no longer cross the city to visit relatives on the eastern side"
+ ], correct:0,
+ why:[
+  "Yes. It takes a side and defends it. That is Section A, and you are not in Section A.",
+  "That explains a cause. It is exactly what you are marked on here.",
+  "That describes what happened, with a date. Keep it in your answer.",
+  "That explains an effect on people. Keep it in your answer."
+ ],
+ expl:"Three of these describe or explain. One argues. Argue here and you give the marker correct history that answers nothing."},
+
+{type:"question", tag:"Analyse", marks:"Practice", scored:true,
+ q:"Sub-question (c) asks how the closing changed relations after 1961. Which sentence answers it?", short:"Answering (c)",
+ opts:[
+  "After 1961 Berlin stopped being the crisis most likely to start a war between the powers",
+  "American and Soviet tanks faced each other down at Checkpoint Charlie in October 1961",
+  "The barrier was built of concrete, wire and watchtowers, and it was guarded through the night",
+  "Kennedy travelled out to West Berlin in 1963 and spoke there to a very large crowd"
+ ], correct:0,
+ why:[
+  "Yes. You said what was different afterwards, which is what the question asked for.",
+  "True, and it is an event, not a change. You are retelling.",
+  "That describes the barrier again. You were asked what it changed.",
+  "True, and you still have not said what was different about relations."
+ ],
+ expl:"All four are true. Only one says what was different afterwards. Retelling the event again is the commonest way this sub-question is lost."},
+
+{type:"question", tag:"Evaluate", marks:"Practice", scored:true,
+ q:"Two candidates open sub-question (a). Which opening gives the marker more to reward?", short:"Choosing an opening",
+ opts:[
+  "By 1958 Khrushchev was demanding that the Western powers leave Berlin, and more people were leaving",
+  "The Berlin Wall was built in 1961 by the East German government under Walter Ulbricht",
+  "The Berlin Wall was a very important event in the Cold War with many causes and effects",
+  "The main cause was that communism does not work, so people naturally wanted to escape it"
+ ], correct:0,
+ why:[
+  "Yes. You gave a date, a name and a cause in one sentence.",
+  "Accurate, and it states the event rather than what led to it. You are one step off.",
+  "Important and many are not facts. You have used a sentence and said nothing checkable.",
+  "That is an opinion about communism. It argues, and you were not asked to argue."
+ ],
+ expl:"Open with something the marker can check. A date and a named cause do more work than a whole sentence of adjectives."},
+
+{type:"question", tag:"Evaluate", marks:"Practice", scored:true,
+ q:"Your answer is accurate throughout, but every fact is about 1989 rather than 1961. What happens?", short:"Facts from the wrong year",
+ opts:[
+  "Rewards very little, since the facts do not concern this stimulus or this question",
+  "Rewards it as a significance answer, because 1989 shows what eventually changed",
+  "Rewards roughly half of it, because the material is still about Berlin and the Wall",
+  "Rewards the facts in full, because accuracy is what the evidence dimension measures"
+ ], correct:0,
+ why:[
+  "Yes. The marker asks whether your facts fit this question, not whether you know facts.",
+  "The question set the year. Your facts from a different one do not become significance.",
+  "Same topic is not the same question. You do not get half for being nearby.",
+  "Stop believing this one now. Your correct facts about the wrong year earn very little."
+ ],
+ expl:"Choosing facts is the skill being marked, not knowing them. Write accurate history about the wrong year and you show a topic you know instead of the one they asked for."},
+
+{type:"mtaIntro"},
+
+{type:"mta", id:"A",
+ script:"<p>The Wall was built on 13 August 1961. It was made of concrete blocks and wire, with watchtowers along it and guards on duty at all hours. In October 1961 American and Soviet tanks faced each other at Checkpoint Charlie. Over the following years people tried to escape across it and some of them were shot. Kennedy visited West Berlin in 1963 and made a famous speech to a crowd there.</p>",
+ q:"What will the marker do with this one?",
+ opts:[
+  "Reward the knowledge, but find no answer to what actually changed",
+  "Reward it highly, because the facts are correct and there are plenty of them",
+  "Reward almost nothing, because the facts are wrong or badly dated"
+ ], correct:0,
+ why:[
+  "Yes. You spotted a candidate who knows the topic and answered a different question.",
+  "Plenty is not the test. Read it again and see if you can find what was different.",
+  "Look again. Every fact in it is right, so that is not what you are marking down."
+ ],
+ expl:"Every fact is correct. Not one sentence says what was different after 1961. Write like this and the marker sees that you know the history and missed the question."},
+
+{type:"mta", id:"B",
+ script:"<p>The Wall showed the whole world that communism had failed, because any government that has to lock its own people in has already lost the argument. It made the Cold War far worse and proved that the Soviet Union could never be trusted by anybody. This is why the West was right to stand firm until the Wall finally came down.</p>",
+ q:"What will the marker do with this one?",
+ opts:[
+  "Reward very little, because it argues a case and gives almost no history",
+  "Reward it well, because it takes a clear position and holds it to the end",
+  "Reward the significance, because it explains what the Wall meant for the world"
+ ], correct:0,
+ why:[
+  "Yes. You looked for a date, a name or a place, and there is not one.",
+  "That is what Section A wants, which is why this trap catches candidates like you.",
+  "Significance still has to rest on facts, and you have none here to rest it on."
+ ],
+ expl:"It sounds confident and gives the marker nothing to check. Bring your essay voice into Section B and confidence is all you have on the page."},
+
+{type:"mta", id:"C",
+ script:"<p>After August 1961 the Berlin question stopped being the crisis most likely to start a war. The border was closed, so the flow of people that had kept the city in a standing emergency came to an end. Both sides settled for the line in practice, while refusing to accept it in public. The tank standoff at Checkpoint Charlie in October 1961 ended without a shot fired. When the next crisis came, a year later, it was over Cuba and not over Berlin.</p>",
+ q:"What will the marker do with this one?",
+ opts:[
+  "Reward it highly, because it states the change and dates the evidence for it",
+  "Reward it moderately, because it does state a change but leaves the facts thin",
+  "Reward it moderately, because the history is sound but the change is left unstated"
+ ], correct:0,
+ why:[
+  "Yes. You saw the change named first, then dated evidence in every sentence after.",
+  "Count them: a closed border, the tanks, a date, the next crisis. You have plenty.",
+  "Read the first sentence again. You will find the change stated before anything else."
+ ],
+ expl:"Notice it is no longer than the other two. You are not asked to write more. Spend the same space on what the sub-question wanted and that page earns you far more."},
+
+{type:"results"}
+];
+
+
+/* The IEB generic rubric for extended writing, summarised in our own words.
+   Marked as a whole, out of thirty, by level. No dimension has its own score. */
+var LEVELS=[
+ {n:"Level 7+",m:"27 to 30",g:"The best answer you could write in an exam room",
+  k:"Excellent knowledge. Every sub-question answered fully.",
+  e:"Outstanding choice of facts.",
+  s:"Significance shown very well.",
+  i:"Very small slips do not stop you reaching the top."},
+ {n:"Level 7",m:"24 to 26",g:"Very good, with a few gaps",
+  k:"Very good knowledge. Every sub-question answered very well.",
+  e:"Very good choice of facts.",
+  s:"Significance shown well.",
+  i:"Minor errors and a few gaps, but a very good answer."},
+ {n:"Level 6",m:"21 to 23",g:"Adequate, some gaps and some errors",
+  k:"Good knowledge. Sub-questions largely answered.",
+  e:"Mostly correct facts.",
+  s:"Significance shown clearly.",
+  i:"An adequate answer with some gaps."},
+ {n:"Level 5",m:"18 to 20",g:"Answers the question but short on detail",
+  k:"Solid knowledge. Sub-questions not answered well.",
+  e:"Correct facts, with gaps and things left out.",
+  s:"Significance understood, with lapses.",
+  i:"Tends to be vague. Short on specific detail."},
+ {n:"Level 4",m:"15 to 17",g:"Generally vague, repetition showing",
+  k:"Fair knowledge. Sub-questions not answered fully.",
+  e:"Some correct facts, with gaps.",
+  s:"Significance shown, with important omissions.",
+  i:"A generally vague answer. Repetition is visible."},
+ {n:"Level 3",m:"12 to 14",g:"Glimpses of evidence, same points repeated",
+  k:"Some knowledge. Sub-questions poorly answered.",
+  e:"Flawed facts, with errors and significant gaps.",
+  s:"Significance shown only in a limited way.",
+  i:"Shows glimpses. Repeats the same points."},
+ {n:"Level 2",m:"9 to 11",g:"Very little specific detail, major flaws",
+  k:"Limited knowledge. Sub-questions barely answered.",
+  e:"Limited facts, or serious errors.",
+  s:"Significance barely understood.",
+  i:"Very repetitive, with major flaws."},
+ {n:"Level 1",m:"0 to 8",g:"Reads as off-topic, or nearly empty of fact",
+  k:"Little or no knowledge. Sub-questions not answered.",
+  e:"Facts severely limited, or simply wrong.",
+  s:"Significance not understood.",
+  i:"An incomplete answer with little or no factual content."}
+];
+
+
+/* Three things to take into the exam, shown on request rather than
+   added to the bottom of a screen the learner has already scrolled. */
+function openCarry(){
+  var back=el('<div class="modal-back"></div>');
+  var m=el('<div class="modal" role="dialog" aria-modal="true" aria-label="Three things to carry into the exam"></div>');
+  m.innerHTML='<div class="eyebrow">Take these with you</div>'+
+    '<h3>Carry these three into the exam</h3>'+
+    '<div class="pt"><b>One</b>Answer every sub-question, in order. Never answer one at the cost of the others.</div>'+
+    '<div class="pt"><b>Two</b>The picture is a stimulus. Use what is in it as fact and do not analyse it.</div>'+
+    '<div class="pt"><b>Three</b>Where a sub-question asks what changed, say what changed. Retell the event again and you earn nothing there.</div>';
+  var close=el('<button class="modal-close" type="button">Close</button>');
+  function shut(){
+    document.removeEventListener("keydown",onKey);
+    if(back.parentNode) back.parentNode.removeChild(back);
+    var c=document.querySelector(".results-finish"); if(c) c.focus();
+  }
+  function onKey(e){ if(e.key==="Escape") shut(); }
+  close.addEventListener("click",shut);
+  back.addEventListener("click",function(e){ if(e.target===back) shut(); });
+  document.addEventListener("keydown",onKey);
+  m.appendChild(close); back.appendChild(m);
+  document.body.appendChild(back);
+  close.focus();
+}
+
+/* ---------- engine ---------- */
+var stage=document.getElementById("stage"),
+    bar=document.getElementById("bar"),
+    stepEl=document.getElementById("step"),
+    fillEl=document.getElementById("fill");
+var i=0, answered={}, log=[];
+var scoredTotal=FLOW.filter(function(s){return s.type==="question"&&s.scored;}).length
+                +FLOW.filter(function(s){return s.type==="mta";}).length;
+
+function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+/* Options are shuffled so the answer is never in a habitual place.
+   The permutation is cached per screen, so Back and Continue show the
+   same order the learner already read. */
+var perms={};
+function perm(idx,n){
+  if(perms[idx]) return perms[idx];
+  var a=[],k;
+  for(k=0;k<n;k++) a.push(k);
+  for(k=n-1;k>0;k--){
+    var j=Math.floor(Math.random()*(k+1)), t=a[k]; a[k]=a[j]; a[j]=t;
+  }
+  perms[idx]=a; return a;
+}
+/* {optN} names an option by the order it was written, and prints the
+   letter it actually landed on after the shuffle. */
+function label(txt,order,keys){
+  return txt.replace(/\{opt(\d+)\}/g,function(m,n,at){
+    var pos=order.indexOf(parseInt(n,10));
+    if(pos<0) return "that option";
+    /* a reference that opens a sentence needs a capital */
+    var before=txt.slice(0,at).replace(/<[^>]*>/g,"");
+    var head=/(^|[.!?])\s*$/.test(before);
+    return (head?"Option ":"option ")+keys[pos];
+  });
+}
+function el(h){var d=document.createElement("div");d.innerHTML=h;return d.firstElementChild;}
+
+function chrome(){
+  var showBar=(FLOW[i].type!=="cover"&&FLOW[i].type!=="results");
+  bar.classList.toggle("hidden",!showBar);
+  stepEl.textContent="Step "+i+" of "+(FLOW.length-2);
+  fillEl.style.width=Math.round((i/(FLOW.length-1))*100)+"%";
+}
+
+function nav(backOK,label,fn){
+  var n=el('<div class="nav"></div>');
+  if(backOK){
+    var b=el('<button class="go ghost" type="button">Back</button>');
+    b.addEventListener("click",function(){i--;render();});
+    n.appendChild(b);
+  }
+  var g=el('<button class="go" type="button">'+label+'</button>');
+  g.addEventListener("click",fn);
+  n.appendChild(g);
+  return n;
+}
+
+function render(){
+  var s=FLOW[i]; stage.innerHTML=""; chrome(); window.scrollTo(0,0);
+
+  if(s.type==="cover"){
+    var c=el('<div class="cover"></div>');
+    c.innerHTML='<div class="eyebrow">Kula Revise &middot; Grade 12 History &middot; IEB</div>'+
+      '<h1>Marking the<br><span class="hl">extended writing</span><br>answer</h1>'+
+      '<div class="cover-lines"><b>Paper 1, Section B.</b> A picture, three sub-questions '+
+      'and about thirty minutes. No introduction. No conclusion. No argument.<br><br>'+
+      'You will judge three real-shaped answers and decide what a marker does with each one.</div>';
+    c.appendChild(nav(false,"Start",function(){i++;render();}));
+    stage.appendChild(c);
+    return;
+  }
+
+  if(s.type==="story"){
+    var d=el('<div class="card story margin-strip"></div>');
+    d.innerHTML='<span class="stamp">'+s.stamp+'</span>'+
+      s.lines.map(function(l){return "<p>"+l+"</p>";}).join("");
+    stage.appendChild(d);
+    stage.appendChild(nav(true,"Continue",function(){i++;render();}));
+    return;
+  }
+
+  if(s.type==="note"){
+    var d2=el('<div class="card"></div>');
+    d2.innerHTML='<div class="eyebrow">'+s.eyebrow+'</div><h2>'+s.h2+'</h2>'+s.html;
+    stage.appendChild(d2);
+    stage.appendChild(nav(true,"Continue",function(){i++;render();}));
+    return;
+  }
+
+  if(s.type==="stimulus"){
+    var d3=el('<div class="card"></div>');
+    d3.innerHTML='<div class="eyebrow">The question</div>'+
+      '<h2>The question you are working from</h2>'+
+      '<p>The stem, the sub-questions and the stimulus below are ours. They follow '+
+      'the IEB Paper 1 Section B pattern and are not taken from a past paper.</p>'+
+      '<div class="stimulus">'+BERLIN+
+      '<div class="cap">Berlin after 1945, divided into four occupation sectors. The thick line is the border closed on 13 August 1961. Drawn for Kula Revise, not to scale.</div></div>'+
+      '<div class="stem"><p><b>Explain the closing of the Berlin border by answering the following questions:</b></p>'+
+      '<ol><li>What led the East German government to close the border in August 1961?</li>'+
+      '<li>How did the Western powers respond to the closing of the border?</li>'+
+      '<li>How did the closing of the border change relations between East and West after 1961?</li></ol></div>'+
+      '<p style="margin-top:1rem">Keep this in front of you. The questions that follow are about how you would answer it.</p>';
+    stage.appendChild(d3);
+    stage.appendChild(nav(true,"Continue",function(){i++;render();}));
+    return;
+  }
+
+
+  if(s.type==="reveal"){
+    var rv=el('<div class="card"></div>');
+    rv.innerHTML='<div class="eyebrow">'+s.eyebrow+'</div><h2>'+s.h2+'</h2>'+
+      '<p>'+s.lead+'</p><div class="reveal"></div>';
+    var rbox=rv.querySelector(".reveal"), opened=0;
+    s.items.forEach(function(it,n){
+      var row=el('<div class="rv"></div>');
+      row.innerHTML='<button class="rv-top" type="button" aria-expanded="false">'+
+        '<span class="rv-num">'+(n+1)+'</span><span>'+it.t+'</span>'+
+        '<span class="rv-sign">+</span></button>'+
+        '<div class="rv-body hidden">'+it.b+'</div>';
+      var top=row.querySelector(".rv-top"), bod=row.querySelector(".rv-body");
+      top.addEventListener("click",function(){
+        var open=row.classList.toggle("open");
+        bod.classList.toggle("hidden",!open);
+        top.setAttribute("aria-expanded",open?"true":"false");
+        row.querySelector(".rv-sign").textContent=open?"\u2212":"+";
+        if(open&&!row.dataset.seen){row.dataset.seen="1";opened++;
+          if(opened===s.items.length) rv.querySelector(".done-note").textContent="All three open. Keep them in this order.";}
+      });
+      rbox.appendChild(row);
+    });
+    rv.appendChild(el('<div class="done-note">Tap each one to open it.</div>'));
+    rv.appendChild(el('<div class="step-note">'+s.close+'</div>'));
+    stage.appendChild(rv);
+    stage.appendChild(nav(true,"Continue",function(){i++;render();}));
+    return;
+  }
+
+  if(s.type==="ladder"){
+    var ld=el('<div class="card"></div>');
+    ld.innerHTML='<div class="eyebrow">The IEB rubric for extended writing</div>'+
+      '<h2>How your answer is levelled</h2>'+
+      '<p>This is the rubric the marker actually uses. It is not a tally. '+
+      'They read the whole answer, decide which level it sits at, and mark it there. '+'<span class="hl">It is not a tally.</span></p>'+
+      '<p>Four things are weighed. <span class="hl">None of them carries its own score.</span></p>'+
+      '<div class="dims"><span class="dim">Knowledge</span><span class="dim">Evidence</span>'+
+      '<span class="dim">Significance</span><span class="dim">Main impression</span></div>'+
+      '<p style="margin-top:1rem">Tap a level to see what it asks for.</p><div class="lad"></div>';
+    var lbox=ld.querySelector(".lad");
+    LEVELS.forEach(function(L){
+      var row=el('<div class="lv"></div>');
+      row.innerHTML='<button class="lv-top" type="button" aria-expanded="false">'+
+        '<span class="lv-name">'+L.n+'</span><span class="lv-mark">'+L.m+'</span>'+
+        '<span class="lv-gist">'+L.g+'</span></button>'+
+        '<div class="lv-body hidden"><dl>'+
+        '<dt>Knowledge and sub-questions</dt><dd>'+L.k+'</dd>'+
+        '<dt>Choice of factual evidence</dt><dd>'+L.e+'</dd>'+
+        '<dt>Significance, where asked</dt><dd>'+L.s+'</dd>'+
+        '<dt>Main impression</dt><dd>'+L.i+'</dd></dl></div>';
+      var t=row.querySelector(".lv-top"), b=row.querySelector(".lv-body");
+      t.addEventListener("click",function(){
+        var open=row.classList.toggle("open");
+        b.classList.toggle("hidden",!open);
+        t.setAttribute("aria-expanded",open?"true":"false");
+      });
+      lbox.appendChild(row);
+    });
+    ld.appendChild(el('<div class="step-note"><b>Open level 6 and level 5 together.</b> '+
+      'Almost nothing moves between them except one line. At six the sub-questions are '+
+      'largely answered. At five they are not answered well. That single step is where '+
+      '<span class="hl">most marks are lost</span>, and you control it.</div>'));
+    stage.appendChild(ld);
+    stage.appendChild(nav(true,"Continue",function(){i++;render();}));
+    return;
+  }
+
+  if(s.type==="mtaIntro"){
+    var d4=el('<div class="card"></div>');
+    d4.innerHTML='<div class="eyebrow">Mark this answer</div>'+
+      '<h2>Now you hold the pen</h2>'+
+      '<p>Three candidates answered sub-question (c): how the closing of the border changed relations after 1961.</p>'+
+      '<p>Read each one and decide what the marker does with it. The answers are close in length, so length will not tell you anything.</p>'+
+      '<p>Judging somebody else\'s answer is the fastest way to see your own habits, so take each one slowly.</p>';
+    stage.appendChild(d4);
+    stage.appendChild(nav(true,"Read the first answer",function(){i++;render();}));
+    return;
+  }
+
+  if(s.type==="results"){
+    var got=log.filter(function(r){return r.ok;}).length;
+    var pct=scoredTotal?Math.round(got/scoredTotal*100):0;
+    var band = pct>=85?"Exam ready":pct>=68?"Strong":pct>=50?"Solid":pct>=34?"Patchy":"Start again";
+    var advice = pct>=85
+      ? "You can tell description from argument and you know where the facts belong. Sit a Section B question with a clock running."
+      : pct>=68
+      ? "The shape is there. Go back over any item about which sub-question a fact belongs to, then write a full answer."
+      : pct>=50
+      ? "You know the difference in theory. Reread the three cards on order and significance, then run this again."
+      : pct>=34
+      ? "Run this again from the start. Most of what is missing is the difference between describing and arguing."
+      : "Take it again slowly from the top. Section B rewards a habit you can build in one sitting.";
+    var d5=el('<div class="cover"></div>');
+    d5.innerHTML='<div class="eyebrow">How you did</div>'+
+      '<div class="score">'+got+'<small>/'+scoredTotal+'</small></div>'+
+      '<div class="band">'+band+'</div>'+
+      '<p>'+advice+'</p>'+
+      '<h3>What you judged</h3><div class="recap">'+
+      log.map(function(r){return '<div><span>'+esc(r.label)+'</span><span>'+
+        (r.ok?"Correct":"Missed")+'</span></div>';}).join("")+'</div>'+
+      '';
+    var acts=el('<div class="nav"></div>');
+    var carry=el('<button class="go results-finish" type="button">Finish</button>');
+    carry.addEventListener("click",openCarry);
+    var again=el('<button class="go ghost" type="button">Run it again</button>');
+    again.addEventListener("click",function(){
+      i=0; answered={}; log=[]; perms={}; render();
+    });
+    acts.appendChild(carry); acts.appendChild(again);
+    d5.appendChild(acts);
+    stage.appendChild(d5);
+    return;
+  }
+
+  /* question and mta share the option machinery */
+  var isMTA=(s.type==="mta");
+  var card=el('<div class="card"></div>');
+  var head='<div class="qhead"><span class="marks">'+(isMTA?"Practice":s.marks)+'</span></div>';
+  var body=isMTA
+    ? '<div class="eyebrow">Answer '+s.id+' of C</div><div class="script">'+s.script+'</div>'+
+      '<div class="dims"><span class="dim">Knowledge</span><span class="dim">Evidence</span>'+
+      '<span class="dim">Significance</span><span class="dim">Main impression</span></div>'+
+      '<div class="q" style="margin-top:1.1rem">'+s.q+'</div>'
+    : '<div class="q">'+s.q+'</div>';
+  card.innerHTML=head+body+'<div class="opts"></div>';
+  var box=card.querySelector(".opts");
+  var keys=["A","B","C","D"];
+  /* One nav block per screen. Before answering it holds Back only; answering
+     rebuilds it with Continue as well. Appending a second block here was
+     putting two Back buttons on the page. */
+  var navBox=el('<div class="nav"></div>');
+  if(i>0){
+    var backBtn=el('<button class="go ghost" type="button">Back</button>');
+    backBtn.addEventListener("click",function(){i--;render();});
+    navBox.appendChild(backBtn);
+  }
+  var order=perm(i,s.opts.length);
+  var shownCorrect=order.indexOf(s.correct);
+
+  /* Showing the answered state. This runs both when the learner answers and
+     when they come back to a question they have already done, so returning to
+     it shows their answer again instead of a dead screen they cannot leave. */
+  function reveal(n, record){
+    var orig=order[n], ok=(orig===s.correct);
+    Array.prototype.forEach.call(box.children,function(o,m){
+      o.disabled=true;
+      if(m===shownCorrect) o.classList.add("right");
+      else if(m===n) o.classList.add("wrong");
+    });
+    if(record && s.scored!==false){
+      log.push({label:(isMTA?("Answer "+s.id):(s.short||s.q)), ok:ok});
+    }
+    var e=el('<div class="fb '+(ok?"y":"n")+'"></div>');
+    e.innerHTML='<span class="verdict '+(ok?"y":"n")+'">'+
+      '<span class="mk" aria-hidden="true">'+(ok?"\u2713":"\u2717")+'</span>'+
+      (ok?"Correct":"Not this one")+'</span>'+
+      ((s.why&&s.why[orig])?'<p class="pick">'+label(s.why[orig],order,keys)+'</p>':'')+
+      '<p>'+label(s.expl,order,keys)+'</p>';
+    card.appendChild(e);
+    navBox.innerHTML="";
+    var fresh=nav(i>0, i===FLOW.length-2?"See where you stand":"Continue",
+      function(){i++;render();});
+    while(fresh.firstChild) navBox.appendChild(fresh.firstChild);
+  }
+
+  order.forEach(function(orig,n){
+    var b=el('<button class="opt" type="button"><span class="key">'+keys[n]+
+             '</span><span>'+esc(s.opts[orig])+'</span></button>');
+    b.addEventListener("click",function(){
+      if(answered[i]!==undefined) return;
+      answered[i]=n;
+      reveal(n, true);
+    });
+    box.appendChild(b);
+  });
+  /* already answered: replay it, and do not log it a second time */
+  if(answered[i]!==undefined) reveal(answered[i], false);
+  stage.appendChild(card);
+  stage.appendChild(navBox);
+}
+
+render();
+})();
+</script>
+</body>
+</html>
